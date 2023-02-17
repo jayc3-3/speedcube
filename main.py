@@ -3,9 +3,8 @@ import asyncio
 import random
 import os
 import time
-
+#This is only meant for exporting to web, exporting to desktop with asyncio causes the program to be flagged as a virus
 from objects import *
-
 #Game version 1.0.0
 pygame.init()
 
@@ -27,17 +26,6 @@ pygame.mixer.music.load('./Audio/BackgroundMusic.ogg')
 pygame.mixer.music.play(-1, 0.0, 500)
 PlayerDeath = pygame.mixer.Sound('./Audio/PlayerDeath.wav')
 GameStart = pygame.mixer.Sound('./Audio/GameStart.wav')
-
-#Change to True if exporting to web!!!
-Web = False
-
-if not Web:
-    if os.path.exists('./HighScore.txt'):
-        File = open('./HighScore.txt', 'r+', encoding='utf-8')
-    else:
-        File = open('./HighScore.txt', 'a+', encoding='utf-8')
-        File.close()
-        File = open('./HighScore.txt', 'r+', encoding='utf-8')
 
 Platforms = []
 
@@ -66,17 +54,7 @@ async def Game():
     ScoreStart = 0
     ScoreCurrent = 0
     Title = True
-    if Web:
-        HighScore = 0
-    
-    if not Web:
-        HSFF = File.read()
-        HSFF.rstrip('\x00')
-
-        if HSFF == "":
-            HighScore = 0
-        else:
-            HighScore = int(HSFF)
+    HighScore = 0
        
     while Running:
         DeltaTime = Clock.tick(60) / 1000
@@ -108,10 +86,6 @@ async def Game():
         
             if Score > HighScore:
                 HighScore = Score
-                if not Web:
-                    File.truncate(0)
-                    File.seek(0)
-                    File.write(str(HighScore))
         
             if pygame.key.get_pressed()[pygame.K_RIGHT]:
                 if not pygame.key.get_pressed()[pygame.K_LEFT]:
@@ -212,11 +186,8 @@ async def Game():
         else:
             TitleText = LargeFont.render("SpeedCube", True, (255, 255, 255))
             StartText = SmallFont.render("Enter to Start", True, (255, 255, 255))
-            TitleHighScore = MediumFont.render("High score: " + str(HighScore), True, (255, 255, 255))
             Screen.blit(TitleText, (270, 100))
             Screen.blit(StartText, (380, 225))
-            if not Web:
-                Screen.blit(TitleHighScore, (50, 450))
     
         Window.blit(pygame.transform.scale(Screen, Window.get_rect().size), (0, 0))
         pygame.display.flip()
@@ -227,8 +198,6 @@ async def Game():
         
         if not Running:
             pygame.quit()
-            if not Web:
-                File.close()
             return
         
         await asyncio.sleep(0)
