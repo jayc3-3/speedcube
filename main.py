@@ -80,9 +80,6 @@ async def Game():
        
     while Running:
         DeltaTime = Clock.tick(60) / 1000
-        
-        FPS = round(Clock.get_fps())
-        FPSStr = str(FPS)
 
         if Title:
             if pygame.key.get_pressed()[pygame.K_RETURN]:
@@ -215,15 +212,12 @@ async def Game():
         else:
             TitleText = LargeFont.render("SpeedCube", True, (255, 255, 255))
             StartText = SmallFont.render("Enter to Start", True, (255, 255, 255))
-            TitleHighScore = MediumFont.render("Your high score: " + str(HighScore), True, (255, 255, 255))
+            TitleHighScore = MediumFont.render("High score: " + str(HighScore), True, (255, 255, 255))
             Screen.blit(TitleText, (270, 100))
             Screen.blit(StartText, (380, 225))
             if not Web:
                 Screen.blit(TitleHighScore, (50, 450))
-
-        FPSText = MediumFont.render("FPS: " + FPSStr, True, (255, 255, 255))
-        Screen.blit(FPSText, (50, 475))
-
+    
         Window.blit(pygame.transform.scale(Screen, Window.get_rect().size), (0, 0))
         pygame.display.flip()
 
