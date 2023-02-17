@@ -2,7 +2,7 @@ import pygame
 import random
 import os
 import time
-
+#This file is a edited version of main.py that doesn't trigger Windows Defender
 from objects import *
 #Game version 1.0.0
 pygame.init()
